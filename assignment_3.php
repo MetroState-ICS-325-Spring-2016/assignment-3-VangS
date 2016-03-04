@@ -1,5 +1,4 @@
 <?php
-<?php
 // This is the hostname or IP of the database server.
 // Since we are using MySQL running on the same computer as your
 // PHP code, you would use either 127.0.0.1 or localhost.  Both
