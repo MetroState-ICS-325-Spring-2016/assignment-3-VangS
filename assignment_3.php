@@ -23,6 +23,7 @@ $db_database = 'classicmodels';
 //       Since we will be checking if the connection is ok, we don't need any errors to be printed,
 //       as we will be printing errors explicitly.
 // http://php.net/manual/en/mysqli.quickstart.connections.php
+
 // http://php.net/manual/en/language.operators.errorcontrol.php
 $mysql_connection = @new mysqli($db_hostname, $db_username, $db_password, $db_database);
 // Make sure that the connection to the MySQL database is ok.
