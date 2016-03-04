@@ -59,6 +59,31 @@ assignment_3.php contains most of the code you need to complete the assignment.
 You will need to write the SQL query and write the output.
 You should use only 1 SQL query to the database.
 
+ // tables together.
+  $query_result = $mysql_connection->query("SELECT your query here");
+  
+ +
+ +$query_result = $mysql_connection->query("SELECT customerName, firstName, lastName FROM customers, country, employees WHERE customers.salesRepEmployeeNumber = employees.employeeNumber ORDER BY country, customerName");
+ +
+  // Make sure there wasn't an error with the query.
+  if ($query_result !== false) {
+      // Fetch each row of the query result as an associative array.
+ @@ -58,6 +18,10 @@
+  	    // Your output goes here
+      }
+  
+ +        echo $row_array['customerName'] . ", " . $row_array['country'] . " - " . $row_array['firstName'] . " " .
+ +             $row_array['lastName'] . ".\n";
+ +      }
+ +
+      // We're done with the query result set, so free it.
+      // This frees up the memory the result set object was using.
+      // http://php.net/manual/en/mysqli-result.free.php
+ @@ -68,6 +32,4 @@
+      exit(2);
+  }
+
+
 Problems 1 through 5 are worth 10 points each.
 Problem 6 is worth 40 points.
 The total number of points for the assignment is 90.
