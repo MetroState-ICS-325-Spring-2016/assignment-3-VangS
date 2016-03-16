@@ -12,7 +12,7 @@ $db_username = 'root';
 // not set a password for the root user.  If you are in the database
 // class and installed MySQL separatly from XAMPP, you may have a
 // password set.  If that is the case, set it here.
-$db_password = '';
+$db_password = 'admin';
 // Typically you want to specify what database to use.
 // For this PHP script, we will use the `classicmodels` database.
 // You must import this database into MySQL first using
@@ -23,7 +23,6 @@ $db_database = 'classicmodels';
 //       Since we will be checking if the connection is ok, we don't need any errors to be printed,
 //       as we will be printing errors explicitly.
 // http://php.net/manual/en/mysqli.quickstart.connections.php
-
 // http://php.net/manual/en/language.operators.errorcontrol.php
 $mysql_connection = @new mysqli($db_hostname, $db_username, $db_password, $db_database);
 // Make sure that the connection to the MySQL database is ok.
@@ -41,29 +40,26 @@ if ($mysql_connection->connect_errno) {
 //
 // For your query, you will need to join the customers and employees
 // tables together.
+$query_result = $mysql_connection->query("SELECT customers.customerName, customers.country, CONCAT(`firstName`,' ',
+`lastName`) AS `salesrep` FROM `employees`, `customers` ORDER BY `salesrep`,`country`, `customerName`;");
+// Make sure there wasn't an error with the query.
+if ($query_result !== false) {
+    // Fetch each row of the query result as an associative array.
+    // http://php.net/manual/en/mysqli-result.fetch-assoc.php
+    while($row_array = $query_result->fetch_assoc()) {
+        // Your output goes here
+        echo $row_array["customerName"].", ".$row_array["country"]." - ".$row_array["salesrep"]."\n";
+    }
+    // We're done with the query result set, so free it.
+    // This frees up the memory the result set object was using.
+    // http://php.net/manual/en/mysqli-result.free.php
+    $query_result->free();
 
- $query_result = $mysql_connection->query("SELECT your query here");
- 
- 
- $query_result = $mysql_connection->query("SELECT customerName, firstName, lastName FROM customers, country, employees WHERE customers.salesRepEmployeeNumber = employees.employeeNumber ORDER BY country, customerName");
- 
- // Make sure there wasn't an error with the query.
- if ($query_result !== false) {
-     // Fetch each row of the query result as an associative array.
-     // http://php.net/manual/en/mysqli-result.fetch-assoc.php
-     while($row_array = $query_result->fetch_assoc()) {
- 	    // Your output goes here
-         echo $row_array['customerName'] . ", " . $row_array['country'] . " - " . $row_array['firstName'] . " " .
-              $row_array['lastName'] . ".\n";
-     }
- 
-     // We're done with the query result set, so free it.
-     // This frees up the memory the result set object was using.
-     // http://php.net/manual/en/mysqli-result.free.php
-     $query_result->free();
- } else {
-     // http://php.net/manual/en/mysqli.error.php
-     echo "The query failed: $mysql_connection->error\n";
-     exit(2);
- }
-
+} else {
+    // http://php.net/manual/en/mysqli.error.php
+    echo "The query failed: $mysql_connection->error\n";
+    exit(2);
+}
+// We're all done with the MySQL connection so close it.
+// http://php.net/manual/en/mysqli.close.php
+$mysql_connection->close();
